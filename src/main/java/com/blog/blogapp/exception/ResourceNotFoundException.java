@@ -1,5 +1,11 @@
 package com.blog.blogapp.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.annotation.Resource;
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class ResourceNotFoundException extends RuntimeException{
     private String resourceName;
     private String fieldName;
