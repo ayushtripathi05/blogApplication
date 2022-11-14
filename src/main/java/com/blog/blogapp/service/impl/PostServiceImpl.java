@@ -1,6 +1,7 @@
 package com.blog.blogapp.service.impl;
 
 import com.blog.blogapp.entity.Post;
+import com.blog.blogapp.exception.ResourceNotFoundException;
 import com.blog.blogapp.payload.PostDto;
 import com.blog.blogapp.repository.PostRepository;
 import com.blog.blogapp.service.PostService;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -36,7 +38,20 @@ public class PostServiceImpl implements PostService {
         return listPostDto;
     }
 
+    @Override
+    public PostDto getPostById(long id) {
+        Optional<Post> post= Optional.ofNullable(postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("post", "id", String.valueOf(id))));
+        return postToPostDto(post.get());
+    }
 
+    @Override
+    public PostDto updatePostById(PostDto postDto, long id) {
+        Optional<Post> post= Optional.ofNullable(postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("post", "id", String.valueOf(id))));
+        post.get().setDescription(postDto.getDescription());
+        post.get().setTitle(postDto.getTitle());
+        post.get().setContent(postDto.getContent());
+        return postToPostDto(postRepository.save(post.get()));
+    }
 
 
     private PostDto postToPostDto(Post post) {
