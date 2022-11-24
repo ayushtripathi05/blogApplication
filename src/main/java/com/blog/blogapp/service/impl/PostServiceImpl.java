@@ -53,10 +53,16 @@ public class PostServiceImpl implements PostService {
         return postToPostDto(postRepository.save(post.get()));
     }
 
+    public PostDto deletePostById(long id) {
+        Optional<Post> post= Optional.ofNullable(postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("post", "id", String.valueOf(id))));
+        postRepository.deleteById(id);
+        return postToPostDto(post.get());
+    }
+
 
     private PostDto postToPostDto(Post post) {
         PostDto postDto=new PostDto();
-        postDto.setId(post.getId());
+        postDto.setId(post.getPost_id());
         postDto.setTitle(post.getTitle());
         postDto.setDescription(post.getDescription());
         postDto.setContent(post.getDescription());
@@ -65,7 +71,7 @@ public class PostServiceImpl implements PostService {
 
     private Post PostDtoToPost(PostDto postDto) {
         Post post=new Post();
-        post.setId(postDto.getId());
+        post.setPost_id((postDto.getId()));
         post.setTitle(postDto.getTitle());
         post.setDescription(postDto.getDescription());
         post.setContent(postDto.getDescription());
