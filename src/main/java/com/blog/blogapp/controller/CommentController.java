@@ -6,13 +6,11 @@ import com.blog.blogapp.payload.PostDto;
 import com.blog.blogapp.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping("/api/posts/")
 public class CommentController {
     CommentService commentService;
 
@@ -20,12 +18,9 @@ public class CommentController {
         this.commentService=commentService;
     }
 
-    @PostMapping
-    public ResponseEntity<CommentDto> createPost(@RequestBody CommentDto commentDto) {
-        return  new ResponseEntity<>(commentService.createComment(commentDto), HttpStatus.CREATED);
+    @PostMapping(path = "{id}/comments/")
+    public ResponseEntity<CommentDto> createComment(@PathVariable(name = "id") long id, @RequestBody CommentDto commentDto) {
+        return  new ResponseEntity<>(commentService.createComment(id , commentDto), HttpStatus.CREATED);
     }
-
-
-
 
 }
